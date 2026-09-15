@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duck Creek Underwriting Workflow Diagram</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+    .step-card {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased p-4 md:p-8 font-sans min-h-screen">
+
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- Header Banner -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm relative overflow-hidden">
+      <div class="absolute -right-10 -top-10 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-10 -bottom-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">Google ADK 2.x • A2UI</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Zero-LLM Actuary</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20">Zero Hallucinations</span>
+          </div>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+            Duck Creek Underwriting Intelligence
+          </h1>
+          <p class="text-sm text-slate-400 mt-1">
+            End-to-End Autonomous Insurance Pipeline: From PDF Upload to Instant Bound Policy in &lt; 15 Seconds
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="btnAnimate" onclick="simulateWorkflow()" class="px-4 py-2 text-sm font-semibold rounded-xl bg-blue-600 hover:bg-blue-500 text-white shadow-md transition-all flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Simulate Flow
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Phases Grid Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+
+      <!-- PHASE 1: INTAKE & COMPLIANCE -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Phase 1: Ingestion &amp; Clearance</span>
+          <span class="text-xs font-mono text-slate-500">Steps 01-03</span>
+        </div>
+
+        <!-- Step 1 -->
+        <div id="step-1" class="step-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 relative overflow-hidden">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-sm shrink-0">1</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">📄</span>
+                <h3 class="font-bold text-sm text-white">Read Documents</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Document AI extracts company name, address, and TIV from PDFs, saving exact character offsets and bounding boxes.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="step-2" class="step-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 relative overflow-hidden">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-sm shrink-0">2</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">⚖️</span>
+                <h3 class="font-bold text-sm text-white">Sanctions Check</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Screens company and EIN against U.S. OFAC SDN list. Verified Clear (no fraud or conflict matches).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div id="step-3" class="step-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 relative overflow-hidden">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-sm shrink-0">3</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">📋</span>
+                <h3 class="font-bold text-sm text-white">Appetite Check</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Classifies NAICS 541512 operations against company underwriting appetite guidelines (Preferred Class).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 2: PHYSICAL & HAZARD ENRICHMENT -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Phase 2: Risk Enrichment</span>
+          <span class="text-xs font-mono text-slate-500">Steps 04-06</span>
+        </div>
+
+        <!-- Step 4 -->
+        <div id="step-4" class="step-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 relative overflow-hidden">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">4</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">🛰️</span>
+                <h3 class="font-bold text-sm text-white">Hazard Lookups</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Apigee checks FEMA flood maps (Zone X), satellite wildfire index (2.4/10), and ISO fire station distance (1.2 mi).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div id="step-5" class="step-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 relative overflow-hidden">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">5</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">🏢</span>
+                <h3 class="font-bold text-sm text-white">Building Check</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Decomposes COPE: Class 4 concrete walls, steel roof, 100% NFPA 13 sprinklers, and estimates PML ($3.125M / 25%).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div id="step-6" class="step-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 relative overflow-hidden">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">6</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">📉</span>
+                <h3 class="font-bold text-sm text-white">Loss History</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Analyzes 5-year claims record (2021-2026): $0.00 incurred losses, 0 open claims (Favorable Loss-Free Record).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 3: ZERO-LLM PRICING CORE -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-purple-400">Phase 3: Symbolic Pricing</span>
+          <span class="text-xs font-mono text-slate-500">Steps 07-08</span>
+        </div>
+
+        <!-- Step 7 -->
+        <div id="step-7" class="step-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 relative overflow-hidden">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0">7</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">🧮</span>
+                <h3 class="font-bold text-sm text-white">Pure Math Pricing</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Zero-LLM Actuary applies deterministic formulas: Score = <strong class="text-purple-400">89/100</strong>, Base Premium = <strong class="text-purple-400">$29,294.62</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 8 -->
+        <div id="step-8" class="step-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 relative overflow-hidden">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0">8</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">🎁</span>
+                <h3 class="font-bold text-sm text-white">3 Quote Options</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Packages multi-tier options: <strong>Basic</strong> ($25.7k), <strong>Preferred</strong> ($29.2k), and <strong>Comprehensive</strong> ($35.7k).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 4: COMPLIANCE & AUTO-RELEASE -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Phase 4: Release &amp; Bind</span>
+          <span class="text-xs font-mono text-slate-500">Steps 09-10</span>
+        </div>
+
+        <!-- Step 9 -->
+        <div id="step-9" class="step-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 relative overflow-hidden">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-sm shrink-0">9</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">🛡️</span>
+                <h3 class="font-bold text-sm text-white">Anti-Hallucination</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                AST Mechanical Guard validates 100% of facts against document spans and API hashes. 0 violations detected.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 10 -->
+        <div id="step-10" class="step-card bg-slate-950 border border-slate-800 rounded-xl p-3.5 relative overflow-hidden">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">10</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-1.5">
+                <span class="text-base">⚡</span>
+                <h3 class="font-bold text-sm text-white">Instant Decision</h3>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">
+                Auto-approves Straight-Through Processing (STP) in <strong>&lt; 15 seconds</strong>! Ready for 1-click binding.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Interactive Result Bar -->
+    <div id="resultBox" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-lg">✓</div>
+        <div>
+          <h4 class="font-bold text-sm text-white">Workflow Execution Status: Ready / Verified</h4>
+          <p class="text-xs text-slate-400">All 10 steps execute sequentially over Server-Sent Events (SSE) with bitwise reproducibility.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-slate-950 border border-slate-800 text-blue-400">Score: 89/100</span>
+        <span class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-slate-950 border border-slate-800 text-emerald-400">Premium: $29,294.62</span>
+        <span class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-slate-950 border border-slate-800 text-purple-400">STP Released</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function simulateWorkflow() {
+      const btn = document.getElementById('btnAnimate');
+      btn.disabled = true;
+      btn.innerText = "Executing Workflow...";
+
+      const totalSteps = 10;
+      let currentStep = 1;
+
+      for (let i = 1; i <= totalSteps; i++) {
+        const card = document.getElementById(`step-${i}`);
+        card.classList.remove('border-blue-500', 'bg-blue-500/10', 'border-emerald-500', 'bg-emerald-500/10');
+      }
+
+      const interval = setInterval(() => {
+        if (currentStep > 1) {
+          const prev = document.getElementById(`step-${currentStep - 1}`);
+          prev.classList.remove('border-blue-500', 'bg-blue-500/10');
+          prev.classList.add('border-emerald-500', 'bg-emerald-500/5');
+        }
+
+        if (currentStep <= totalSteps) {
+          const card = document.getElementById(`step-${currentStep}`);
+          card.classList.add('border-blue-500', 'bg-blue-500/10');
+          currentStep++;
+        } else {
+          clearInterval(interval);
+          btn.disabled = false;
+          btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Re-Simulate Flow`;
+        }
+      }, 500);
+    }
+  </script>
+</body>
+</html>
+

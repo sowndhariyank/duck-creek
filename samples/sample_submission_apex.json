@@ -1,0 +1,27 @@
+{
+  "submission_id": "SUB-2026-90412",
+  "applicant": {
+    "legal_name": "Apex Logistics Solutions LLC",
+    "dba": "Apex Freight Express",
+    "ein": "84-9201948",
+    "primary_address": "450 Innovation Parkway, Suite 200, Austin, TX 78701",
+    "business_operations": "Custom freight logistics software, transportation management, and temperature-controlled dry warehousing.",
+    "naics_code": "541512"
+  },
+  "exposure": {
+    "total_insured_value": 12500000.0,
+    "annual_gross_revenue": 8500000.0,
+    "construction_type": "Masonry_Non_Combustible",
+    "year_built": 2018,
+    "roof_age_years": 6,
+    "fire_protection": "100% NFPA 13 Wet Pipe System",
+    "sprinklered": true
+  },
+  "loss_history": {
+    "experience_period_years": 5,
+    "total_incurred_losses": 0.0,
+    "open_claims_count": 0,
+    "loss_record_source": "Travelers 5-Year Loss Run Report"
+  }
+}
+
