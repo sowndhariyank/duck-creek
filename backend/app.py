@@ -153,3 +153,8 @@ if __name__ == '__main__':
     logger.info(f"Starting Duck Creek Underwriting Platform on {config.server_host}:{config.server_port}")
     app.run(host=config.server_host, port=config.server_port, debug=False)
 
+
+
+
+
+
