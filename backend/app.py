@@ -41,6 +41,12 @@ def serve_index():
     return render_template("index.html")
 
 
+@app.route('/workflow')
+def serve_workflow():
+    """Renders the Interactive Duck Creek Underwriting Workflow Demo page."""
+    return render_template("workflow.html")
+
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health and readiness check for Cloud Run and GKE probes."""

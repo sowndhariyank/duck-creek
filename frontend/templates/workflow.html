@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Creek Underwriting Workflow Diagram | Google Cloud Agentic Stack</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0B0F19;
+            --bg-surface: #111827;
+            --bg-surface-elevated: #1F2937;
+            --border-color: #374151;
+            --accent-blue: #3B82F6;
+            --accent-green: #10B981;
+            --accent-yellow: #F59E0B;
+            --accent-red: #EF4444;
+            --accent-purple: #8B5CF6;
+            --accent-cyan: #06B6D4;
+            --text-primary: #F9FAFB;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Shell Header */
+        .wf-header {
+            height: 70px;
+            background: rgba(17, 24, 39, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .wf-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .wf-brand h1 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60A5FA, #34D399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .wf-brand span {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+        }
+
+        .wf-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-workbench {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-workbench:hover {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        /* Container */
+        .wf-container {
+            max-width: 1480px;
+            margin: 0 auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Control Panel */
+        .wf-controller-bar {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .controller-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scenario-select {
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .ctrl-btn {
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .ctrl-btn:hover {
+            border-color: var(--accent-blue);
+            color: #93C5FD;
+        }
+
+        .ctrl-btn.primary {
+            background: linear-gradient(135deg, var(--accent-blue), #2563EB);
+            border: none;
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+        }
+
+        .ctrl-btn.autoplay-on {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--accent-red);
+            color: #FCA5A5;
+        }
+
+        /* Swimlane Workflow Diagram Canvas */
+        .diagram-canvas {
+            background: #080C14;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 24px;
+            position: relative;
+            overflow-x: auto;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .swimlanes-wrapper {
+            min-width: 1180px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+        }
+
+        .swimlane-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .swimlane-header {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .swimlane-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .swimlane-badge {
+            font-size: 0.68rem;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .swimlane-nodes {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Diagram Step Nodes */
+        .wf-node {
+            background: var(--bg-surface);
+            border: 2px solid #2D3748;
+            border-radius: 10px;
+            padding: 12px 16px;
+            min-width: 185px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .wf-node:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+        }
+
+        .wf-node.active-step {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.15);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            transform: scale(1.03);
+        }
+
+        .wf-node.completed-step {
+            border-color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .wf-node.declined-step {
+            border-color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        .wf-node-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .node-step-tag {
+            font-size: 0.68rem;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .wf-node.active-step .node-step-tag {
+            background: var(--accent-blue);
+            color: #fff;
+        }
+
+        .wf-node.completed-step .node-step-tag {
+            background: var(--accent-green);
+            color: #fff;
+        }
+
+        .node-icon {
+            font-size: 1.1rem;
+        }
+
+        .node-title {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .node-subtext {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.25;
+        }
+
+        /* Connector Arrow Between Nodes */
+        .node-connector {
+            display: flex;
+            align-items: center;
+            color: #4B5563;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .node-connector.active {
+            color: var(--accent-blue);
+            animation: pulseArrow 1s infinite alternate;
+        }
+
+        @keyframes pulseArrow {
+            from { transform: translateX(0); opacity: 0.6; }
+            to { transform: translateX(3px); opacity: 1; }
+        }
+
+        /* Decision Diamond Node */
+        .wf-node.diamond-node {
+            border-color: var(--accent-yellow);
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .wf-node.duckcreek-node {
+            border-color: #34D399;
+            background: rgba(52, 211, 153, 0.08);
+        }
+
+        /* Step-by-Step Deep-Dive Explainer Card */
+        .step-explainer-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 24px;
+        }
+
+        .explainer-main {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .explainer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 14px;
+        }
+
+        .explainer-title {
+            font-size: 1.18rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spiffe-badge {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: #C4B5FD;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .info-box {
+            background: var(--bg-surface-elevated);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .info-box-label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-blue);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-box-text {
+            font-size: 0.88rem;
+            color: #E2E8F0;
+            line-height: 1.5;
+        }
+
+        .bullets-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 6px;
+            font-size: 0.84rem;
+        }
+
+        .bullets-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .bullet-icon {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .touchpoint-box {
+            background: rgba(52, 211, 153, 0.1);
+            border: 1px solid rgba(52, 211, 153, 0.35);
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .touchpoint-icon {
+            font-size: 1.4rem;
+        }
+
+        .touchpoint-text {
+            font-size: 0.84rem;
+            color: #A7F3D0;
+            line-height: 1.4;
+        }
+
+        /* Explainer Side Panel (Payload / Telemetry) */
+        .explainer-side {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .code-container {
+            background: #060910;
+            border: 1px solid #1E293B;
+            border-radius: 8px;
+            padding: 14px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: #CBD5E1;
+            overflow-x: auto;
+            max-height: 280px;
+            line-height: 1.45;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .metric-card {
+            background: var(--bg-surface-elevated);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 10px 12px;
+            text-align: center;
+        }
+
+        .metric-val {
+            font-size: 1.15rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #60A5FA;
+        }
+
+        .metric-lbl {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Header -->
+    <header class="wf-header">
+        <div class="wf-brand">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#4285F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="#34A853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="#FBBC05" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+                <h1>Duck Creek Underwriting: Step-by-Step Workflow Diagram</h1>
+                <span>Interactive Pipeline Visualizer • Google Cloud Agentic Stack • Zero-LLM Actuary • Duck Creek PAS</span>
+            </div>
+        </div>
+
+        <div class="wf-nav-links">
+            <a href="/" class="btn-link btn-workbench">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Launch Live Workbench
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="wf-container">
+        <!-- Interactive Controller Bar -->
+        <section class="wf-controller-bar">
+            <div class="controller-group">
+                <label for="diagramScenarioSelect" style="font-size:0.85rem; color:var(--text-secondary); font-weight:600;">Active Demo Scenario:</label>
+                <select id="diagramScenarioSelect" class="scenario-select">
+                    <option value="apex">Apex Logistics (Score 89 - Preferred - STP Auto-Bind)</option>
+                    <option value="cascade">Cascade Cold Storage (Score 76 - Human Referral Brief)</option>
+                    <option value="timberline">Timberline Millwork (Score 42 - Woodworking Decline)</option>
+                </select>
+            </div>
+
+            <div class="controller-group">
+                <button id="btnPrev" class="ctrl-btn" disabled>
+                    ◀ Prev Step
+                </button>
+                <button id="btnNext" class="ctrl-btn primary">
+                    Next Step ▶
+                </button>
+                <button id="btnAutoWalkthrough" class="ctrl-btn" style="background: rgba(16, 185, 129, 0.15); border-color: var(--accent-green); color:#34D399;">
+                    ▶ Auto-Play Walkthrough
+                </button>
+                <button id="btnResetDiagram" class="ctrl-btn">
+                    ↺ Reset
+                </button>
+            </div>
+
+            <div class="controller-group" style="font-family:var(--font-mono); font-size:0.82rem; color:var(--text-secondary);">
+                <span id="stepProgressIndicator">Step 1 of 8</span>
+            </div>
+        </section>
+
+        <!-- Visual Swimlane Diagram Canvas -->
+        <section class="diagram-canvas">
+            <div class="swimlanes-wrapper">
+                <!-- Lane 1: Ingestion & Document AI -->
+                <div class="swimlane-row">
+                    <div class="swimlane-header">
+                        <div class="swimlane-title"><span>📥</span> Ingestion & OCR</div>
+                        <div class="swimlane-badge">Google Cloud Storage</div>
+                    </div>
+                    <div class="swimlane-nodes">
+                        <div class="wf-node active-step" data-step-index="0" id="node_0">
+                            <div class="wf-node-top">
+                                <span class="node-step-tag">STEP 01</span>
+                                <span class="node-icon">📄</span>
+                            </div>
+                            <div class="node-title">Document AI Extraction</div>
+                            <div class="node-subtext">ACORD 125/140 & SOV OCR byte-span entity mapping</div>
+                        </div>
+
+                        <div class="node-connector" id="conn_0">➔</div>
+
+                        <div class="wf-node" data-step-index="1" id="node_1">
+                            <div class="wf-node-top">
+                                <span class="node-step-tag">STEP 02</span>
+                                <span class="node-icon">🛡️</span>
+                            </div>
+                            <div class="node-title">Clearance & Sanctions</div>
+                            <div class="node-subtext">OFAC / SDN & PEP watchlists via Apigee Gateway</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lane 2: Verification & Hazard Enrichment -->
+                <div class="swimlane-row">
+                    <div class="swimlane-header">
+                        <div class="swimlane-title"><span>🌍</span> Hazard & Appetite</div>
+                        <div class="swimlane-badge">Apigee GIS & Guidelines</div>
+                    </div>
+                    <div class="swimlane-nodes">
+                        <div class="wf-node" data-step-index="2" id="node_2">
+                            <div class="wf-node-top">
+                                <span class="node-step-tag">STEP 03</span>
+                                <span class="node-icon">📋</span>
+                            </div>
+                            <div class="node-title">Appetite Eligibility</div>
+                            <div class="node-subtext">NAICS/SIC class guide check against capacity guidelines</div>
+                        </div>
+
+                        <div class="node-connector" id="conn_2">➔</div>
+
+                        <div class="wf-node" data-step-index="3" id="node_3">
+                            <div class="wf-node-top">
+                                <span class="node-step-tag">STEP 04</span>
+                                <span class="node-icon">🛰️</span>
+                            </div>
+                            <div class="node-title">Geospatial Enrichment</div>
+                            <div class="node-subtext">FEMA Flood Zone X, Wildfire brush risk, ISO PPC 3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lane 3: Symbolic Actuary & Grounding -->
+                <div class="swimlane-row">
+                    <div class="swimlane-header">
+                        <div class="swimlane-title"><span>⚖️</span> Actuary & Citations</div>
+                        <div class="swimlane-badge">Zero-LLM Math Core</div>
+                    </div>
+                    <div class="swimlane-nodes">
+                        <div class="wf-node" data-step-index="4" id="node_4">
+                            <div class="wf-node-top">
+                                <span class="node-step-tag">STEP 05</span>
+                                <span class="node-icon">🧮</span>
+                            </div>
+                            <div class="node-title">Symbolic Rating Engine</div>
+                            <div class="node-subtext">100% Bitwise deterministic math & composite risk scoring</div>
+                        </div>
+
+                        <div class="node-connector" id="conn_4">➔</div>
+
+                        <div class="wf-node" data-step-index="5" id="node_5">
+                            <div class="wf-node-top">
+                                <span class="node-step-tag">STEP 06</span>
+                                <span class="node-icon">🔒</span>
+                            </div>
+                            <div class="node-title">Mechanical Grounding</div>
+                            <div class="node-subtext">Zero-hallucination citation guard blocks uncited facts</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lane 4: Triage & Duck Creek PAS Binding -->
+                <div class="swimlane-row">
+                    <div class="swimlane-header">
+                        <div class="swimlane-title"><span>🦆</span> Duck Creek & Triage</div>
+                        <div class="swimlane-badge">TransACT Core APIs</div>
+                    </div>
+                    <div class="swimlane-nodes">
+                        <div class="wf-node diamond-node" data-step-index="6" id="node_6">
+                            <div class="wf-node-top">
+                                <span class="node-step-tag">STEP 07</span>
+                                <span class="node-icon">🔀</span>
+                            </div>
+                            <div class="node-title" id="triageNodeTitle">Triage Gateway</div>
+                            <div class="node-subtext" id="triageNodeSub">Score ≥ 85: STP Bind | 60-84: Referral</div>
+                        </div>
+
+                        <div class="node-connector" id="conn_6">➔</div>
+
+                        <div class="wf-node duckcreek-node" data-step-index="7" id="node_7">
+                            <div class="wf-node-top">
+                                <span class="node-step-tag">STEP 08</span>
+                                <span class="node-icon">📜</span>
+                            </div>
+                            <div class="node-title" id="duckCreekNodeTitle">Duck Creek PAS Bind</div>
+                            <div class="node-subtext">TransACT policy issuance & Merkle audit pack export</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed "What Is Happening" Step Explainer Card -->
+        <section class="step-explainer-card">
+            <!-- Left: Human-Readable Business Explainer -->
+            <div class="explainer-main">
+                <div class="explainer-header">
+                    <h2 class="explainer-title" id="explainerTitle">
+                        <span>📄</span> Step 1: Ingestion & Document AI Extraction
+                    </h2>
+                    <span class="spiffe-badge" id="explainerSpiffe">spiffe://amtha.corp/ns/agents/sa/intake-doc-agent</span>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-label"><span>💡</span> What Is Happening at this Step?</div>
+                    <p class="info-box-text" id="explainerDesc">
+                        The broker submits an insurance package containing ACORD 125, ACORD 140, and Statement of Values (SOV) spreadsheets. 
+                        Google Cloud Document AI executes deep character-level OCR extraction, maps tabular SOV line items into canonical data objects, 
+                        and attaches cryptographic SHA-256 byte-span hashes to guarantee provenance.
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-label"><span>🔍</span> Step Execution Findings & Key Facts</div>
+                    <ul class="bullets-list" id="explainerFindings">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+
+                <div class="touchpoint-box">
+                    <div class="touchpoint-icon">🦆</div>
+                    <div class="touchpoint-text" id="explainerTouchpoint">
+                        <strong>Duck Creek Touchpoint:</strong> Automatically initializes a new Submission entity and pre-populates Duck Creek Party/Insured account records with zero human re-keying.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Subagent Telemetry & Duck Creek API Payload -->
+            <div class="explainer-side">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-val" id="metricLatency">210ms</div>
+                        <div class="metric-lbl">Step Latency</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-val" id="metricConfidence">100%</div>
+                        <div class="metric-lbl">Citation Grounding</div>
+                    </div>
+                </div>
+
+                <div class="info-box" style="flex:1; display:flex; flex-direction:column;">
+                    <div class="info-box-label"><span>⚙️</span> Subagent I/O & Duck Creek API Wiretap</div>
+                    <pre class="code-container" id="explainerPayload">
+// Loading step wiretap...
+                    </pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const scenarioData = {
+            apex: {
+                name: "Apex Logistics Solutions (STP Preferred - 89 pts)",
+                decision: "STP_APPROVED",
+                steps: [
+                    {
+                        step: 1,
+                        title: "Step 1: Ingestion & Document AI Extraction",
+                        icon: "📄",
+                        agent: "intake_doc_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/intake-doc-agent",
+                        latency: "210ms",
+                        confidence: "100%",
+                        desc: "Broker uploads ACORD 125/140 forms and an Excel Statement of Values (SOV) to Google Cloud Storage. Document AI extracts all building metrics, COPE attributes, and computes SHA-256 byte-span hashes.",
+                        findings: [
+                            "<strong>Insured Name:</strong> Apex Logistics Solutions Inc. (EIN: 84-2918291)",
+                            "<strong>Primary Location:</strong> 742 Industrial Pkwy, Plainfield, IN 46168",
+                            "<strong>Total Insured Value (TIV):</strong> $12,450,000 (Building: $8.2M, Contents: $4.25M)",
+                            "<strong>Doc AI Hash:</strong> <code>e3b0c44298fc1c149afbf4c8996fb92427ae...</code>"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Automatically creates Duck Creek Party/Insured account records with zero manual re-entry.",
+                        payload: {
+                            "event": "DOCUMENT_AI_COMPLETED",
+                            "submission_id": "SUB-2026-90412",
+                            "entities_extracted": 48,
+                            "sov_records_parsed": 1,
+                            "tiv_amount": 12450000
+                        }
+                    },
+                    {
+                        step: 2,
+                        title: "Step 2: Clearance & OFAC Sanctions Screening",
+                        icon: "🛡️",
+                        agent: "clearance_sanctions_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/clearance-sanctions-agent",
+                        latency: "145ms",
+                        confidence: "100%",
+                        desc: "Performs real-time sanctions and anti-money laundering (AML) screening across US Treasury OFAC, PEP, and BIS Watchlists via down-scoped Apigee API Gateway.",
+                        findings: [
+                            "<strong>OFAC SDN Watchlist:</strong> PASSED (0 matches detected)",
+                            "<strong>PEP / Sanctions Check:</strong> 0 alerts; clean regulatory status",
+                            "<strong>Clearance Certificate:</strong> <code>CLR-2026-PASS-90412</code> issued"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Clearance confirmation hash attached to Duck Creek Submission Underwriting Notes.",
+                        payload: {
+                            "sanctions_check": "CLEARED",
+                            "treasury_sdn_matches": 0,
+                            "clearance_id": "CLR-2026-PASS-90412"
+                        }
+                    },
+                    {
+                        step: 3,
+                        title: "Step 3: Carrier Appetite & Eligibility Verification",
+                        icon: "📋",
+                        agent: "appetite_eligibility_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/appetite-eligibility-agent",
+                        latency: "115ms",
+                        confidence: "100%",
+                        desc: "Validates applicant NAICS code against carrier commercial lines appetite rules and treaty reinsurance capacity guidelines.",
+                        findings: [
+                            "<strong>NAICS Code:</strong> 484110 (General Freight Trucking - Long Distance)",
+                            "<strong>Carrier Appetite Class:</strong> PREFERRED (Fully in-appetite for automated quoting)",
+                            "<strong>Reinsurance Treaty Limits:</strong> Within $25,000,000 statutory capacity"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Flags submission in Duck Creek as Preferred Class A commercial risk.",
+                        payload: {
+                            "naics_code": "484110",
+                            "appetite_status": "PREFERRED",
+                            "max_per_occurrence_limit": 25000000
+                        }
+                    },
+                    {
+                        step: 4,
+                        title: "Step 4: Geospatial Hazard & Exposure Enrichment",
+                        icon: "🛰️",
+                        agent: "data_enrichment_agent & exposure_analysis_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/data-enrichment-agent",
+                        latency: "380ms",
+                        confidence: "100%",
+                        desc: "Enriches facility location with FEMA 100-year flood maps, wildfire brush interfaces, ISO Public Protection Class (PPC), and COPE attributes.",
+                        findings: [
+                            "<strong>FEMA Flood Zone:</strong> Zone X (Minimal flood hazard, outside 500-yr zone)",
+                            "<strong>ISO Fire Protection:</strong> Grade 3 (Municipal hydrant < 250 ft, professional station)",
+                            "<strong>Fire Suppression:</strong> 100% NFPA 13 Wet Sprinkler system (15% rate credit)",
+                            "<strong>Construction Class:</strong> ISO Class 4 (Masonry Non-Combustible, Built 2018)"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Injects validated COPE and GIS hazard metrics into Duck Creek Location & Risk Object models.",
+                        payload: {
+                            "fema_zone": "Zone X",
+                            "iso_ppc": 3,
+                            "construction_class": "ISO Class 4",
+                            "sprinkler_credit": 0.15
+                        }
+                    },
+                    {
+                        step: 5,
+                        title: "Step 5: Zero-LLM Symbolic Actuarial Rating",
+                        icon: "🧮",
+                        agent: "symbolic_rating_engine",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/symbolic-rating-engine",
+                        latency: "92ms",
+                        confidence: "100%",
+                        desc: "Neuro-Symbolic Core: Pure 100% bitwise deterministic mathematics. Computes risk score and exact statutory premiums with ZERO LLM hallucinations.",
+                        findings: [
+                            "<strong>Rating Formula:</strong> Premium = (TIV / 100) × BaseRate × Factors",
+                            "<strong>Composite Risk Score:</strong> <strong>89 / 100 (Preferred Tier)</strong>",
+                            "<strong>Applied Credits:</strong> Sprinkler (-15%), 5-Yr Loss-Free (-10%), Superior Masonry (-5%)",
+                            "<strong>Calculated Premium:</strong> $21,850.00 / year (Preferred Tier)"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Rating debits and credit multipliers sent directly to Duck Creek TransACT Rating Service.",
+                        payload: {
+                            "rule_version": "v2026.03.14-STABLE",
+                            "risk_score": 89,
+                            "base_rate": 0.21,
+                            "preferred_premium": 21850.00,
+                            "math_determinism": "100% BITWISE IDENTICAL"
+                        }
+                    },
+                    {
+                        step: 6,
+                        title: "Step 6: Mechanical Grounding & Citation Barrier",
+                        icon: "🔒",
+                        agent: "grounding_compliance_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/grounding-compliance-agent",
+                        latency: "160ms",
+                        confidence: "100%",
+                        desc: "Enforces mechanical zero-hallucination barrier. Every extracted claim and rating multiplier must trace to a verified document span or rule ID.",
+                        findings: [
+                            "<strong>Total Factual Claims:</strong> 64 claims verified",
+                            "<strong>Uncited Claims:</strong> 0 (100% Citation Density)",
+                            "<strong>Compliance Status:</strong> PASSED (Ready for automated broker release)"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Attaches cryptographic proof certificate to Duck Creek policy audit packet.",
+                        payload: {
+                            "grounding_eval_score": 1.0,
+                            "uncited_claims": 0,
+                            "status": "BARRIER_CLEARED"
+                        }
+                    },
+                    {
+                        step: 7,
+                        title: "Step 7: Triage Routing Gateway (STP Auto-Release)",
+                        icon: "🔀",
+                        agent: "triage_referral_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/triage-referral-agent",
+                        latency: "120ms",
+                        confidence: "100%",
+                        desc: "Evaluates composite score against triage decision threshold. Score (89) >= 85 triggers automated Straight-Through Processing (STP).",
+                        findings: [
+                            "<strong>Composite Score:</strong> 89 / 100",
+                            "<strong>Routing Decision:</strong> <strong>STRAIGHT_THROUGH_PROCESSING (STP)</strong>",
+                            "<strong>Human Review:</strong> Bypassed (Meets all auto-bind parameters)",
+                            "<strong>Quote Options:</strong> Basic ($18,985), Preferred ($21,850), Comprehensive ($24,900)"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Triggers Duck Creek Quote Generation workflow without human intervention.",
+                        payload: {
+                            "routing": "STP_AUTO_RELEASE",
+                            "score": 89,
+                            "human_referral_needed": false,
+                            "quote_id": "QTE-2026-APEX-89"
+                        }
+                    },
+                    {
+                        step: 8,
+                        title: "Step 8: Duck Creek PAS Policy Binding & Merkle Audit Pack",
+                        icon: "📜",
+                        agent: "quote_lifecycle_agent & audit_governance_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/quote-lifecycle-agent",
+                        latency: "310ms",
+                        confidence: "100%",
+                        desc: "Calls Duck Creek TransACT REST API to bind the Preferred quote, issue an active policy number, and compute a cryptographic Merkle root for regulatory compliance.",
+                        findings: [
+                            "<strong>Duck Creek Policy Number:</strong> <code>POL-2026-8941209</code> (ACTIVE)",
+                            "<strong>Duck Creek Status:</strong> BOUND_AND_COMMITTED (HTTP 201)",
+                            "<strong>Cryptographic Merkle Root:</strong> <code>7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa...</code>",
+                            "<strong>Turnaround Time:</strong> 28.4 seconds from upload to active policy bind"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Active policy committed across Duck Creek Policy, Billing, and Claims systems.",
+                        payload: {
+                            "duck_creek_policy_number": "POL-2026-8941209",
+                            "status": "BOUND",
+                            "merkle_root": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+                            "pas_ack_id": "PAS-ACK-90412-SUCCESS"
+                        }
+                    }
+                ]
+            },
+            cascade: {
+                name: "Cascade Cold Storage (Referral Review - 76 pts)",
+                decision: "REFERRAL_REQUIRED",
+                steps: [
+                    {
+                        step: 1,
+                        title: "Step 1: Ingestion & Document AI Extraction",
+                        icon: "📄",
+                        agent: "intake_doc_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/intake-doc-agent",
+                        latency: "230ms",
+                        confidence: "100%",
+                        desc: "Extracts cold storage refrigeration equipment, building square footage, and property values for Cascade Cold Storage Partners.",
+                        findings: [
+                            "<strong>Insured Name:</strong> Cascade Cold Storage Partners LLC",
+                            "<strong>Facility:</strong> 1,200,000 cu ft refrigerated cold-chain distribution center",
+                            "<strong>TIV:</strong> $18,200,000 (Substantial perishable food inventory)",
+                            "<strong>Doc AI Hash:</strong> <code>9b8c12a45ef7710bc8d9...</code>"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Ingests specialized cold storage equipment schedule into Duck Creek.",
+                        payload: {"submission_id": "SUB-2026-90881", "entity_count": 52, "tiv": 18200000}
+                    },
+                    {
+                        step: 2,
+                        title: "Step 2: Clearance & OFAC Sanctions Screening",
+                        icon: "🛡️",
+                        agent: "clearance_sanctions_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/clearance-sanctions-agent",
+                        latency: "150ms",
+                        confidence: "100%",
+                        desc: "Clears OFAC sanctions and verifies entity registration in state corporate registry.",
+                        findings: [
+                            "<strong>Sanctions Status:</strong> Clean (0 matches on OFAC / SDN watchlists)",
+                            "<strong>Corporate Registration:</strong> Active Good Standing",
+                            "<strong>Clearance Certificate:</strong> <code>CLR-2026-PASS-90881</code>"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Clearance confirmation hash recorded.",
+                        payload: {"sanctions_cleared": true, "matches": 0}
+                    },
+                    {
+                        step: 3,
+                        title: "Step 3: Carrier Appetite & Ammonia Hazard Review",
+                        icon: "📋",
+                        agent: "appetite_eligibility_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/appetite-eligibility-agent",
+                        latency: "140ms",
+                        confidence: "100%",
+                        desc: "Validates NAICS 493120 (Refrigerated Warehousing). Triggers underwriter review due to hazardous ammonia refrigerant systems.",
+                        findings: [
+                            "<strong>NAICS Code:</strong> 493120 (Refrigerated Warehousing & Storage)",
+                            "<strong>Appetite Ruling:</strong> ELIGIBLE_WITH_STIPULATIONS",
+                            "<strong>Mandatory Requirement:</strong> Ammonia sensor logs and backup generator test certificates required"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Attaches ammonia inspection condition to Duck Creek submission draft.",
+                        payload: {"naics": "493120", "appetite": "CONDITIONAL_APPROVAL"}
+                    },
+                    {
+                        step: 4,
+                        title: "Step 4: Geospatial Hazard & Roof Age Exposure",
+                        icon: "🛰️",
+                        agent: "data_enrichment_agent & exposure_analysis_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/data-enrichment-agent",
+                        latency: "410ms",
+                        confidence: "100%",
+                        desc: "Analyzes coastal windstorm exposure and backup generator infrastructure for perishable spoilage risk.",
+                        findings: [
+                            "<strong>Flood Zone:</strong> Zone X (Minimal 500-yr flood risk)",
+                            "<strong>Roof Age:</strong> 18 years old (Exceeds 15-year preferred threshold)",
+                            "<strong>Spoilage Risk:</strong> 3 on-site diesel backup generators with automatic transfer switches",
+                            "<strong>ISO PPC:</strong> Class 4"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Roof age recorded as risk debit in Duck Creek Risk Object.",
+                        payload: {"roof_age": 18, "backup_generators": 3, "ppc": 4}
+                    },
+                    {
+                        step: 5,
+                        title: "Step 5: Zero-LLM Symbolic Actuarial Rating",
+                        icon: "🧮",
+                        agent: "symbolic_rating_engine",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/symbolic-rating-engine",
+                        latency: "98ms",
+                        confidence: "100%",
+                        desc: "Executes deterministic rating formula. Factors in roof age surcharge and cold storage compressor equipment debits.",
+                        findings: [
+                            "<strong>Roof Age Debit:</strong> +15% surcharge applied deterministically",
+                            "<strong>Equipment Breakdown Surcharge:</strong> +$4,200 for ammonia compressor array",
+                            "<strong>Sprinkler Credit:</strong> -10% (ESFR Sprinkler installation)",
+                            "<strong>Composite Risk Score:</strong> <strong>76 / 100 (Referral Tier)</strong>"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Rating debits formatted into Duck Creek rating algorithm.",
+                        payload: {"risk_score": 76, "roof_debit": 0.15, "annual_premium": 34200.00}
+                    },
+                    {
+                        step: 6,
+                        title: "Step 6: Mechanical Grounding & Citation Barrier",
+                        icon: "🔒",
+                        agent: "grounding_compliance_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/grounding-compliance-agent",
+                        latency: "170ms",
+                        confidence: "100%",
+                        desc: "Validates citations for roof age and backup generator maintenance logs.",
+                        findings: [
+                            "<strong>Verified Facts:</strong> 58 facts grounded to source documents",
+                            "<strong>Grounding Score:</strong> 1.0 (Zero uncited claims)"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Grounding audit token stored in Duck Creek repository.",
+                        payload: {"grounding": "PASS", "citations_checked": 58}
+                    },
+                    {
+                        step: 7,
+                        title: "Step 7: Triage Gateway (Underwriter Referral Required)",
+                        icon: "🔀",
+                        agent: "triage_referral_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/triage-referral-agent",
+                        latency: "195ms",
+                        confidence: "100%",
+                        desc: "Risk Score 76 is within the 60-84 referral bracket. Triggers structured Human Underwriter Referral Brief with required stipulations.",
+                        findings: [
+                            "<strong>Composite Score:</strong> 76 / 100",
+                            "<strong>Routing Decision:</strong> <strong>HUMAN_REFERRAL_REQUIRED</strong>",
+                            "<strong>Assigned Authority:</strong> Senior Commercial Property Underwriter (Tier 2)",
+                            "<strong>Referral Stipulation:</strong> Certified roof thermal drone scan required within 30 days"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Automatically creates an urgent diary task in Duck Creek Underwriter Workbench.",
+                        payload: {
+                            "routing": "REFERRAL",
+                            "triggers": ["ROOF_AGE_18_YEARS", "AMMONIA_EQUIPMENT"],
+                            "assigned_desk": "Senior Property Desk 4"
+                        }
+                    },
+                    {
+                        step: 8,
+                        title: "Step 8: Duck Creek Conditional Quote Release",
+                        icon: "📜",
+                        agent: "quote_lifecycle_agent & audit_governance_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/quote-lifecycle-agent",
+                        latency: "280ms",
+                        confidence: "100%",
+                        desc: "Structures a Conditional Quote inside Duck Creek PAS locked pending human underwriter sign-off.",
+                        findings: [
+                            "<strong>Duck Creek Quote ID:</strong> <code>QTE-2026-CASCADE-76</code>",
+                            "<strong>Duck Creek PAS Status:</strong> PENDING_UNDERWRITER_SIGNOFF",
+                            "<strong>Offered Premium:</strong> $36,800 / year (Subject to roof scan)",
+                            "<strong>Audit Trace:</strong> Merkle root generated with referral trigger flag"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Quote locked in Duck Creek TransACT pending underwriter authorization.",
+                        payload: {
+                            "quote_id": "QTE-2026-CASCADE-76",
+                            "status": "CONDITIONAL_QUOTE_RELEASED",
+                            "merkle_root": "9a12bc443910ef88219034871293847120394871290384712938471293847123"
+                        }
+                    }
+                ]
+            },
+            timberline: {
+                name: "Timberline Millwork (Declined Risk - 42 pts)",
+                decision: "DECLINED_OUT_OF_APPETITE",
+                steps: [
+                    {
+                        step: 1,
+                        title: "Step 1: Ingestion & Document AI Extraction",
+                        icon: "📄",
+                        agent: "intake_doc_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/intake-doc-agent",
+                        latency: "190ms",
+                        confidence: "100%",
+                        desc: "Ingests ACORD forms for Timberline Millwork. Extracts sawdust collection systems and industrial woodworking machinery.",
+                        findings: [
+                            "<strong>Insured Name:</strong> Timberline Millwork Inc.",
+                            "<strong>Operations:</strong> Architectural woodwork, commercial cabinetry, lacquer spraying",
+                            "<strong>TIV:</strong> $6,800,000",
+                            "<strong>Doc AI Hash:</strong> <code>1a4b88fc390291ba2094...</code>"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Creates prospect record in Duck Creek.",
+                        payload: {"submission_id": "SUB-2026-91004", "operations": "Woodworking & Cabinetry"}
+                    },
+                    {
+                        step: 2,
+                        title: "Step 2: Clearance & OFAC Sanctions Screening",
+                        icon: "🛡️",
+                        agent: "clearance_sanctions_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/clearance-sanctions-agent",
+                        latency: "130ms",
+                        confidence: "100%",
+                        desc: "Sanctions checks clear. Entity verified with state records.",
+                        findings: [
+                            "<strong>Sanctions Status:</strong> Clean (0 matches on OFAC / SDN)",
+                            "<strong>Clearance Certificate:</strong> <code>CLR-2026-PASS-91004</code>"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Clearance recorded.",
+                        payload: {"sanctions_cleared": true}
+                    },
+                    {
+                        step: 3,
+                        title: "Step 3: Carrier Appetite - Prohibited Class Flagged",
+                        icon: "📋",
+                        agent: "appetite_eligibility_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/appetite-eligibility-agent",
+                        latency: "110ms",
+                        confidence: "100%",
+                        desc: "Evaluates NAICS 321918 against carrier underwriting guidelines. Carries severe combustible wood dust explosion hazard.",
+                        findings: [
+                            "<strong>NAICS Code:</strong> 321918 (Other Millwork including Flooring)",
+                            "<strong>Combustible Dust Hazard:</strong> Critical NFPA 664 combustible wood dust hazard",
+                            "<strong>Appetite Ruling:</strong> <strong>PROHIBITED_RISK_CLASS</strong>",
+                            "<strong>Carrier Guideline:</strong> Section 4.2 explicitly excludes un-sprinklered woodshops"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Marks risk as Non-Appetite in Duck Creek submission triage.",
+                        payload: {"appetite": "PROHIBITED", "reason": "COMBUSTIBLE_DUST_NFPA_664"}
+                    },
+                    {
+                        step: 4,
+                        title: "Step 4: Geospatial Hazard & Frame Construction Check",
+                        icon: "🛰️",
+                        agent: "data_enrichment_agent & exposure_analysis_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/exposure-analysis-agent",
+                        latency: "340ms",
+                        confidence: "100%",
+                        desc: "Identifies combustible frame construction and inadequate automatic fire suppression.",
+                        findings: [
+                            "<strong>Construction Class:</strong> ISO Class 1 (Frame / Combustible Wood Framing)",
+                            "<strong>Sprinklers:</strong> Partial only; Finish spraying room lacks automatic suppression",
+                            "<strong>Fire Department:</strong> 9.4 miles away (Volunteer department)",
+                            "<strong>ISO PPC:</strong> Class 8b"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Construction Class 1 logged into Duck Creek exposure register.",
+                        payload: {"construction": "ISO_CLASS_1_FRAME", "sprinklers": "INADEQUATE", "ppc": "8B"}
+                    },
+                    {
+                        step: 5,
+                        title: "Step 5: Zero-LLM Symbolic Rating Floor",
+                        icon: "🧮",
+                        agent: "symbolic_rating_engine",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/symbolic-rating-engine",
+                        latency: "85ms",
+                        confidence: "100%",
+                        desc: "Actuarial engine applies severe debit loadings, driving composite score below binding threshold.",
+                        findings: [
+                            "<strong>Combustible Frame Penalty:</strong> -35 points",
+                            "<strong>Combustible Dust Hazard:</strong> -20 points",
+                            "<strong>Volunteer Fire Protection:</strong> -15 points",
+                            "<strong>Composite Risk Score:</strong> <strong>42 / 100 (Sub-Standard Decline)</strong>"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Zero quote generated in Duck Creek TransACT.",
+                        payload: {"risk_score": 42, "threshold": 60, "eligible_for_quote": false}
+                    },
+                    {
+                        step: 6,
+                        title: "Step 6: Mechanical Grounding & Adverse Factor Audit",
+                        icon: "🔒",
+                        agent: "grounding_compliance_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/grounding-compliance-agent",
+                        latency: "150ms",
+                        confidence: "100%",
+                        desc: "Validates all adverse decision factors against carrier guidelines to ensure FCRA regulatory compliance.",
+                        findings: [
+                            "<strong>Adverse Factors Verified:</strong> 3 explicit underwriting triggers",
+                            "<strong>Statutory Citation:</strong> Cited to carrier filing DOI-MANUAL-2026"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Grounding record stored in Duck Creek audit log.",
+                        payload: {"fcra_compliant": true, "adverse_factors": 3}
+                    },
+                    {
+                        step: 7,
+                        title: "Step 7: Automated Declination Triage & FCRA Notice",
+                        icon: "🔀",
+                        agent: "triage_referral_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/triage-referral-agent",
+                        latency: "160ms",
+                        confidence: "100%",
+                        desc: "Generates formal adverse action declination notice compliant with FCRA and state Department of Insurance requirements.",
+                        findings: [
+                            "<strong>Routing Decision:</strong> <strong>DECLINED_RISK</strong>",
+                            "<strong>Primary Adverse Factors:</strong> Wood dust occupancy, Frame construction, Inadequate suppression",
+                            "<strong>Broker Notice:</strong> Formal declination letter generated with itemized reasoning"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Updates Duck Creek submission status to DECLINED.",
+                        payload: {"decision": "DECLINE", "adverse_factors": ["WOOD_DUST", "ISO_CLASS_1", "SPRINKLERS"]}
+                    },
+                    {
+                        step: 8,
+                        title: "Step 8: Duck Creek Archive & Governance Audit Pack",
+                        icon: "📜",
+                        agent: "audit_governance_agent",
+                        spiffe: "spiffe://amtha.corp/ns/agents/sa/audit-governance-agent",
+                        latency: "260ms",
+                        confidence: "100%",
+                        desc: "Closes submission in Duck Creek, sends broker declination, and stamps immutable audit record in regulatory archive.",
+                        findings: [
+                            "<strong>Duck Creek Status:</strong> SUBMISSION_DECLINED_CLOSED",
+                            "<strong>Audit Pack Root:</strong> <code>3d18e9a245fc...</code> (State DOI compliance ready)",
+                            "<strong>Archival Retention:</strong> 7-year regulatory retention scheduled"
+                        ],
+                        touchpoint: "<strong>Duck Creek Touchpoint:</strong> Complete audit trail archived in Duck Creek historical repository.",
+                        payload: {"duck_creek_status": "DECLINED_CLOSED", "audit_pack_id": "AUDIT-DEC-91004"}
+                    }
+                ]
+            }
+        };
+
+        let currentScenario = "apex";
+        let activeStep = 0;
+        let autoPlayTimer = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const scenarioSelect = document.getElementById("diagramScenarioSelect");
+            const btnPrev = document.getElementById("btnPrev");
+            const btnNext = document.getElementById("btnNext");
+            const btnAuto = document.getElementById("btnAutoWalkthrough");
+            const btnReset = document.getElementById("btnResetDiagram");
+
+            // Scenario Select Change
+            scenarioSelect.addEventListener("change", (e) => {
+                currentScenario = e.target.value;
+                activeStep = 0;
+                stopAutoPlay();
+                updateDiagramState();
+            });
+
+            // Step click handlers on nodes
+            document.querySelectorAll(".wf-node").forEach(node => {
+                node.addEventListener("click", () => {
+                    const stepIdx = parseInt(node.getAttribute("data-step-index"), 10);
+                    activeStep = stepIdx;
+                    stopAutoPlay();
+                    updateDiagramState();
+                });
+            });
+
+            // Controller buttons
+            btnNext.addEventListener("click", () => {
+                const maxSteps = scenarioData[currentScenario].steps.length;
+                if (activeStep < maxSteps - 1) {
+                    activeStep++;
+                    updateDiagramState();
+                }
+            });
+
+            btnPrev.addEventListener("click", () => {
+                if (activeStep > 0) {
+                    activeStep--;
+                    updateDiagramState();
+                }
+            });
+
+            btnReset.addEventListener("click", () => {
+                activeStep = 0;
+                stopAutoPlay();
+                updateDiagramState();
+            });
+
+            btnAuto.addEventListener("click", () => {
+                if (autoPlayTimer) {
+                    stopAutoPlay();
+                } else {
+                    startAutoPlay();
+                }
+            });
+
+            // Initial render
+            updateDiagramState();
+        });
+
+        function updateDiagramState() {
+            const scenario = scenarioData[currentScenario];
+            const steps = scenario.steps;
+            const currentStepData = steps[activeStep];
+            const isDeclined = scenario.decision === "DECLINED_OUT_OF_APPETITE";
+
+            // Update node visual classes
+            steps.forEach((s, idx) => {
+                const node = document.getElementById(`node_${idx}`);
+                if (!node) return;
+
+                node.classList.remove("active-step", "completed-step", "declined-step");
+
+                if (idx < activeStep) {
+                    node.classList.add(isDeclined && idx >= 2 ? "declined-step" : "completed-step");
+                } else if (idx === activeStep) {
+                    node.classList.add(isDeclined && idx >= 2 ? "declined-step" : "active-step");
+                }
+            });
+
+            // Update Connectors
+            for (let i = 0; i < 7; i += 2) {
+                const conn = document.getElementById(`conn_${i}`);
+                if (conn) {
+                    if (activeStep > i) {
+                        conn.classList.add("active");
+                    } else {
+                        conn.classList.remove("active");
+                    }
+                }
+            }
+
+            // Triage Node text adjustment based on scenario
+            const triageTitle = document.getElementById("triageNodeTitle");
+            const triageSub = document.getElementById("triageNodeSub");
+            if (currentScenario === "apex") {
+                triageTitle.innerText = "Triage: STP Approved";
+                triageSub.innerText = "Score 89: Direct Auto-Bind";
+            } else if (currentScenario === "cascade") {
+                triageTitle.innerText = "Triage: Referral Brief";
+                triageSub.innerText = "Score 76: Human Review Required";
+            } else {
+                triageTitle.innerText = "Triage: Declined Risk";
+                triageSub.innerText = "Score 42: FCRA Adverse Action";
+            }
+
+            // Duck Creek Node text
+            const duckCreekTitle = document.getElementById("duckCreekNodeTitle");
+            if (currentScenario === "apex") {
+                duckCreekTitle.innerText = "Duck Creek Policy Active";
+            } else if (currentScenario === "cascade") {
+                duckCreekTitle.innerText = "Duck Creek Conditional Quote";
+            } else {
+                duckCreekTitle.innerText = "Duck Creek File Closed";
+            }
+
+            // Update Progress text & buttons
+            document.getElementById("stepProgressIndicator").innerText = `Step ${activeStep + 1} of ${steps.length}: ${currentStepData.title}`;
+            document.getElementById("btnPrev").disabled = activeStep === 0;
+            document.getElementById("btnNext").disabled = activeStep === steps.length - 1;
+
+            // Update Explainer Card Details
+            document.getElementById("explainerTitle").innerHTML = `<span>${currentStepData.icon}</span> ${currentStepData.title}`;
+            document.getElementById("explainerSpiffe").innerText = currentStepData.spiffe;
+            document.getElementById("explainerDesc").innerText = currentStepData.desc;
+            document.getElementById("explainerTouchpoint").innerHTML = currentStepData.touchpoint;
+            document.getElementById("metricLatency").innerText = currentStepData.latency;
+            document.getElementById("metricConfidence").innerText = currentStepData.confidence;
+
+            // Update Findings
+            const findingsList = document.getElementById("explainerFindings");
+            findingsList.innerHTML = "";
+            currentStepData.findings.forEach(f => {
+                const li = document.createElement("li");
+                li.innerHTML = `<span class="bullet-icon">✓</span> <span>${f}</span>`;
+                findingsList.appendChild(li);
+            });
+
+            // Update JSON Code
+            document.getElementById("explainerPayload").innerText = JSON.stringify(currentStepData.payload, null, 2);
+        }
+
+        function startAutoPlay() {
+            const btn = document.getElementById("btnAutoWalkthrough");
+            btn.innerText = "⏸ Pause Walkthrough";
+            btn.classList.add("autoplay-on");
+
+            autoPlayTimer = setInterval(() => {
+                const maxSteps = scenarioData[currentScenario].steps.length;
+                if (activeStep < maxSteps - 1) {
+                    activeStep++;
+                    updateDiagramState();
+                } else {
+                    stopAutoPlay();
+                }
+            }, 3000);
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayTimer) {
+                clearInterval(autoPlayTimer);
+                autoPlayTimer = null;
+            }
+            const btn = document.getElementById("btnAutoWalkthrough");
+            if (btn) {
+                btn.innerText = "▶ Auto-Play Walkthrough";
+                btn.classList.remove("autoplay-on");
+            }
+        }
+    </script>
+</body>
+</html>
