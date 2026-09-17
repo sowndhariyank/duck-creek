@@ -69,6 +69,6 @@ Refer to the following repository specifications for architecture and multi-agen
 * `architecture.md` / `docs/spec/01_master_architecture.md`: Master system topology and Google Cloud services.
 * `orchestration.md` / `docs/spec/09_multi_agent_system_and_fcot_architecture.md`: Fractal Chain of Thought (FCoT) Lead Orchestrator prompt template.
 * `sequential_multi_agent_development_guide.md`: Sequential multi-agent Hub-and-Spoke communication patterns.
-*`FCot2.md`
+* `FCot2.md`: Fractal Chain of Thought (FCoT)
 * `CUSTOMER_HANDOVER_AND_RUNBOOK.md`: Client deployment and local execution runbook.
 
